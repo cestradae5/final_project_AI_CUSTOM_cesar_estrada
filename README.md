@@ -139,6 +139,43 @@ También puede servir la carpeta con un servidor estático local si lo prefiere.
 
 ---
 
+## Sprints de desarrollo
+
+### Sprint 1: Backend — Módulo CAG
+
+Implementación del sistema de contexto persistente en el backend.
+
+| Archivo | Cambio |
+|---|---|
+| `backend/context_store.py` | `ContextStore` con dict en memoria `{user_id: {key: value}}` |
+| `backend/cag.py` | `apply_context()` con reglas para `audience`, `language`, `include_examples` |
+| `backend/assistant.py` | Integración RAG + CAG, singleton `context_store`, retorna `context_used` |
+| `backend/server.py` | Import compartido de `context_store` desde `assistant.py` |
+| `tests/unit/test_unit_context_store.py` | 6 tests TDD para `ContextStore` |
+| `tests/unit/test_unit_cag.py` | 5 tests TDD para `apply_context` |
+
+**Resultado:** 17/17 tests green 🟢
+
+---
+
+### Sprint 2: Frontend — Panel CAG y auto-detección
+
+Conexión del frontend con el backend CAG para visualizar la retención de contexto.
+
+| Archivo | Cambio |
+|---|---|
+| `frontend/index.html` | Panel CAG con lista dinámica + formulario colapsable |
+| `frontend/app.js` | Auto-detección de contexto desde preguntas, badge `context_used` |
+| `frontend/styles.css` | Estilos para context-items, badges, formulario |
+
+**Características:**
+- Carga automática de contexto al abrir la página
+- Detección automática: "explicame como principiante" → guarda `audience`
+- Badge que muestra qué contexto se usó en cada respuesta
+- El contexto persiste entre preguntas (retención visible)
+
+---
+
 ## SDD (Spec-Driven Development)
 
 Todo el desarrollo del módulo CAG se realizó siguiendo SDD. Los artefactos están en `openspec/`:
