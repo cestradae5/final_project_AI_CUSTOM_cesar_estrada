@@ -124,6 +124,132 @@ pre {
   margin-top: 20px;
 }
 
+/* Context panel styles */
+.context-hint {
+  margin: 4px 0 16px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.empty-state {
+  margin: 8px 0;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+#context-list {
+  margin: 8px 0 16px;
+}
+
+.context-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+  padding: 12px 16px;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.context-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.context-key {
+  color: var(--accent-dark);
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.context-value {
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+/* Context form */
+.context-form-details {
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.context-form-details summary {
+  color: var(--accent-dark);
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.context-form-details summary:hover {
+  color: var(--accent);
+}
+
+.context-form {
+  margin-top: 12px;
+}
+
+.context-form select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  color: var(--ink);
+  background: #fffdf8;
+  font: inherit;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  background: transparent;
+}
+
+.btn-secondary:hover {
+  color: #fffaf0;
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+/* Answer styles */
+.answer-text {
+  margin: 12px 0 0;
+  color: var(--ink);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.context-used-badge {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  color: var(--accent-dark);
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
 @media (max-width: 780px) {
   .workspace {
     grid-template-columns: 1fr;

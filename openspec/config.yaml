@@ -1,0 +1,124 @@
+# SDD Configuration for final_project_AI_CUSTOM_cesar_estrada
+# Initialized: 2026-06-12
+
+project:
+  name: final_project_AI_CUSTOM_cesar_estrada
+  description: Context-Augmented Generation (CAG) system with HTTP API and persistent user context
+  root: C:\Users\cesar\Desktop\final_project_AI_CUSTOM_cesar_estrada
+
+stack:
+  language: Python 3.14.6
+  framework: stdlib http.server (no framework)
+  dependencies: none (pure stdlib)
+  architecture: |
+    - backend/server.py: ThreadingHTTPServer with HTTP handlers (GET /health, /api/context; POST /api/ask)
+    - backend/assistant.py: answer_question() for knowledge base queries
+    - backend/cag.py: apply_context() to augment answers with user context (STUB - TDD red)
+    - backend/context_store.py: ContextStore for user context persistence (STUB - TDD red)
+
+strict_tdd: true
+strict_tdd_rationale: test runner (unittest) is present and working; auto-detected from existing tests
+
+testing:
+  runner: unittest
+  runner_command: python -m unittest discover -s {layer} -v
+  
+  layers:
+    - name: base
+      directory: tests/base
+      status: passing (3/3)
+      description: Integration tests for HTTP API endpoints
+      tests:
+        - test_health_returns_ok
+        - test_ask_requires_user_and_question
+        - test_ask_answers_from_knowledge_base
+      command: python -m unittest discover -s tests/base -v
+    
+    - name: validation
+      directory: tests/validation
+      status: failing (0/3)
+      description: Contract tests for CAG context feature
+      tests:
+        - test_saves_context_for_user (expects POST /api/context, 201)
+        - test_retrieves_context_for_user (expects GET /api/context, 200)
+        - test_ask_uses_context_to_influence_later_response (integration: save + ask)
+      command: python -m unittest discover -s tests/validation -v
+      failures: |
+        - POST /api/context not implemented (501 NotImplementedError)
+        - GET /api/context not fully working (501)
+        - apply_context() not processing context items
+    
+    - name: unit
+      directory: tests/unit
+      status: failing (3/11 pass, 2 fail, 6 error)
+      description: Unit tests for CAG and ContextStore (TDD red phase)
+      test_groups:
+        - unit_cag:
+            - test_no_context_returns_base_answer (PASS)
+            - test_audience_context_modifies_answer (FAIL - apply_context() stub)
+            - test_multiple_context_items (FAIL - apply_context() not processing)
+            - test_unknown_context_keys_ignored (PASS)
+            - test_none_context_items (PASS)
+        - unit_context_store:
+            - test_save_returns_true (ERROR - NotImplementedError)
+            - test_save_stores_and_retrieves (ERROR - NotImplementedError)
+            - test_list_for_user_empty (ERROR - NotImplementedError)
+            - test_multiple_keys_for_user (ERROR - NotImplementedError)
+            - test_users_are_isolated (ERROR - NotImplementedError)
+            - test_save_overwrites_existing_key (ERROR - NotImplementedError)
+      command: python -m unittest discover -s tests/unit -v
+      note: Tests written in TDD red phase; stubs raise NotImplementedError
+
+  coverage:
+    tool: not configured
+    rationale: pure stdlib; coverage.py optional
+
+  linting:
+    tool: not configured
+    rationale: project using simple stdlib; lint optional
+
+  type_checking:
+    tool: not configured
+    rationale: pure stdlib; mypy/pyright optional
+
+conventions:
+  test_naming: test_<layer>_<feature>.py with TestClass naming
+  test_structure: |
+    - setUp/tearDown for fixtures
+    - @classmethod setUpClass for integration server setup
+    - Descriptive docstrings required (TDD: tests document behavior)
+  code_organization: |
+    - backend/ for implementation
+    - tests/{base,validation,unit}/ for test layers
+    - No __init__.py in tests/ (unittest auto-discovery)
+  git: yes (repo initialized)
+
+context_awareness:
+  user_level_context: audience (principiante/intermedio/avanzado)
+  language_context: language (español/english)
+  feature_context: include_examples, topic, style
+  persistence_mechanism: ContextStore (in-memory stub, must implement storage)
+  llm_augmentation: answer_question() + apply_context() = full CAG pipeline
+
+implementation_status:
+  completed:
+    - HTTP server with /health, GET /api/context, POST /api/ask endpoints
+    - Knowledge base querying via answer_question()
+    - Test infrastructure (base tests passing)
+  in_progress_tdd_red:
+    - ContextStore.save() and .list_for_user() (tests written, implementation needed)
+    - apply_context() logic to incorporate context into answers (tests written, stub in place)
+  not_started:
+    - Context persistence backend (storage, retrieval)
+    - Context application heuristics (how to modify answers based on context)
+
+sdd_phases:
+  - init: COMPLETE (this file)
+  - explore: READY (clarify context incorporation strategies, persistence options)
+  - propose: READY (scope CAG feature)
+  - spec: READY (define context types, storage interface, answer modification rules)
+  - design: READY (architecture for persistence, CAG logic)
+  - tasks: READY (break into implementation work units)
+  - apply: READY (implement TDD red → green → refactor)
+  - verify: READY (validate all test layers pass)
+  - archive: READY (sync results, complete change cycle)

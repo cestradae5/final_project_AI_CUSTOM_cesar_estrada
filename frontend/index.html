@@ -20,22 +20,39 @@
           <input id="user-id" name="user_id" value="student-01" />
 
           <label for="question">Pregunta</label>
-          <textarea id="question" name="question" rows="5" placeholder="Pregunta sobre RAG, CAG, SDD, BDD o TDD"></textarea>
+          <textarea id="question" name="question" rows="5" placeholder='Ej: "explicame como principiante que es RAG" o "explica SDD con ejemplos"'></textarea>
 
           <button type="submit">Preguntar al asistente</button>
         </form>
 
-        <aside class="card context-card">
-          <p class="panel-label">Panel CAG</p>
-          <h2>Contexto pendiente</h2>
-          <p>Este panel es un punto de partida. Debe mostrar contexto guardado cuando implementes <code>/api/context</code>.</p>
-          <pre id="context-output">Sin contexto cargado.</pre>
-        </aside>
+      <aside class="card context-card">
+        <p class="panel-label">Panel CAG</p>
+        <h2>Contexto activo</h2>
+        <p class="context-hint">El contexto se detecta automaticamente en tus preguntas y se retiene entre mensajes para personalizar las respuestas. Tambien podes agregarlo manualmente aca abajo.</p>
+        <div id="context-list">
+          <p class="empty-state">Sin contexto guardado.</p>
+        </div>
+        <details class="context-form-details">
+          <summary>Agregar contexto</summary>
+          <form id="context-form" class="context-form">
+            <label for="context-key">Clave</label>
+            <select id="context-key" name="key">
+              <option value="audience">audience</option>
+              <option value="language">language</option>
+              <option value="include_examples">include_examples</option>
+            </select>
+            <label for="context-value">Valor</label>
+            <input id="context-value" name="value" placeholder="ej: principiante, español, si" />
+            <button type="submit" class="btn-secondary">Guardar contexto</button>
+          </form>
+        </details>
+      </aside>
       </section>
 
       <section class="card response-card">
         <p class="panel-label">Respuesta</p>
-        <pre id="answer-output">Todavia no hiciste una pregunta.</pre>
+        <div id="answer-output">Todavia no hiciste una pregunta.</div>
+        <div id="context-used" class="context-used-badge" style="display:none"></div>
       </section>
     </main>
 
