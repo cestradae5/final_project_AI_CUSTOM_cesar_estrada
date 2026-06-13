@@ -20,7 +20,7 @@
           <input id="user-id" name="user_id" value="student-01" />
 
           <label for="question">Pregunta</label>
-          <textarea id="question" name="question" rows="5" placeholder="Pregunta sobre RAG, CAG, SDD, BDD o TDD"></textarea>
+          <textarea id="question" name="question" rows="5" placeholder='Ej: "explicame como principiante que es RAG" o "explica SDD con ejemplos"'></textarea>
 
           <button type="submit">Preguntar al asistente</button>
         </form>
@@ -28,7 +28,7 @@
       <aside class="card context-card">
         <p class="panel-label">Panel CAG</p>
         <h2>Contexto activo</h2>
-        <p class="context-hint">El contexto se retiene entre mensajes y personaliza las respuestas.</p>
+        <p class="context-hint">El contexto se detecta automaticamente en tus preguntas y se retiene entre mensajes para personalizar las respuestas. Tambien podes agregarlo manualmente aca abajo.</p>
         <div id="context-list">
           <p class="empty-state">Sin contexto guardado.</p>
         </div>

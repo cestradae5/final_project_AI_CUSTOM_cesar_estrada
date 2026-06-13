@@ -12,6 +12,38 @@ document.addEventListener("DOMContentLoaded", () => {
   loadContext(userId);
 });
 
+// Auto-detect and save context from question
+async function detectAndSaveContext(question, userId) {
+  const q = question.toLowerCase();
+  const saves = [];
+
+  // Detect audience
+  if (/como principiante|para principiantes|soy nuevo|explicame como|explica como/i.test(question)) {
+    saves.push(saveContext(userId, "audience", "explicar como principiante"));
+  }
+
+  // Detect language
+  const langMatch = question.match(/en (español|ingles|inglés|portugués|frances|francés)/i);
+  if (langMatch) {
+    saves.push(saveContext(userId, "language", langMatch[1].toLowerCase()));
+  }
+
+  // Detect examples request
+  if (/con ejemplos|dame ejemplos|ejemplos de|por ejemplo|ejemplo/i.test(question)) {
+    saves.push(saveContext(userId, "include_examples", "si"));
+  }
+
+  await Promise.all(saves);
+}
+
+async function saveContext(userId, key, value) {
+  await fetch(`${API_BASE_URL}/api/context`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: userId, key, value }),
+  });
+}
+
 // Ask question
 askForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -23,6 +55,10 @@ askForm.addEventListener("submit", async (event) => {
   contextUsed.style.display = "none";
   
   try {
+    // Auto-detect and save context from the question
+    await detectAndSaveContext(question, userId);
+    
+    // Now ask the question (backend will use the auto-saved context)
     const response = await fetch(`${API_BASE_URL}/api/ask`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -41,7 +77,7 @@ askForm.addEventListener("submit", async (event) => {
       contextUsed.style.display = "none";
     }
     
-    // Reload context panel
+    // Reload context panel (now shows auto-saved items!)
     await loadContext(userId);
   } catch (error) {
     answerOutput.textContent = `No se pudo conectar con el backend: ${error.message}`;
